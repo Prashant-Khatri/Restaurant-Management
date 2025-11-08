@@ -1,3 +1,4 @@
+import SendVerificationEmail from "@/helpers/SendVerificationEmail";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/User.models";
 import bcrypt from "bcrypt"
@@ -32,7 +33,7 @@ export async function POST(req : Request){
                 message : "Couldn't save user"
             },{status : 401})
         }
-        await SendVerificationEmail({otp})
+        await SendVerificationEmail(name,email,otp)
         return Response.json({
             success : true,
             message : "User save successfully",
