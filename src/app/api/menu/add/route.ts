@@ -1,3 +1,4 @@
+import { uploadToCloudinary } from "@/helpers/uploadToCloudinary";
 import cloudinary from "@/lib/cloudinary";
 import dbConnect from "@/lib/dbConnect";
 import MenuModel from "@/models/Menu.models";
@@ -27,14 +28,7 @@ export async function POST(req : Request){
                 message : "Please upload an image"
             },{status : 401})
         }
-        const bytes = await image.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        const uploadResult = await cloudinary.uploader.upload(
-            `data:${image.type};base64,${buffer.toString("base64")}`,
-            { folder: "MenuItems" }
-        );
-        console.log(uploadResult)
+        const uploadResult=await uploadToCloudinary(image)
 
         if(!uploadResult){
             return Response.json({
