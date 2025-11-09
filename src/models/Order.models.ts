@@ -1,7 +1,29 @@
 import mongoose,{Schema,Document} from "mongoose";
-import { OrderItem, orderItemSchema } from "./OrderItem.models";
+import { MenuItem, menuItemSchema } from "./MenuItem.models";
+export interface OrderItem{
+    menuItem : mongoose.Types.ObjectId;
+    quantity : number;
+    price : number
+}
+
+const orderItemSchema : Schema<OrderItem>=new Schema({
+    menuItem : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "MenuItem",
+        required : true
+    },
+    quantity : {
+        type : Number,
+        required : true,
+        default : 1
+    },
+    price : {
+        type : Number,
+        required : true
+    }
+})
 export interface Order extends Document{
-    custId : string;
+    custId : mongoose.Types.ObjectId;
     orderItems : OrderItem[];
     status : "Preparing" | "Served" | "Paid";
     table : number;
@@ -10,7 +32,8 @@ export interface Order extends Document{
 
 const orderSchema : Schema<Order>=new Schema({
     custId : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
         required : true
     },
     orderItems : [orderItemSchema],
