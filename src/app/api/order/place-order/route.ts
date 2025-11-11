@@ -1,8 +1,7 @@
 import OrderModel from "@/models/Order.models";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/options";
+import { authOptions } from "../../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
-import mongoose from "mongoose";
 
 export async function POST(req : Request){
     try {
@@ -22,7 +21,7 @@ export async function POST(req : Request){
         console.log(totalPrice)
         await dbConnect()
         const newOrder=new OrderModel({
-            custId : "690f2a8c888e734c7791a4a2",
+            custId : session.user._id,
             orderItems,
             status : "Preparing",
             table,

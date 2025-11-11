@@ -1,5 +1,5 @@
 import mongoose,{Schema,Document} from "mongoose";
-import { MenuItem, menuItemSchema } from "./MenuItem.models";
+import "@/models/MenuItem.models";
 export interface OrderItem{
     menuItem : mongoose.Types.ObjectId;
     quantity : number;

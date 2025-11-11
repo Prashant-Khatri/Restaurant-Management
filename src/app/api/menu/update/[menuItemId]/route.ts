@@ -30,8 +30,9 @@ export async function PATCH(req : Request,{params} : {params : {menuItemId : str
         if(name) menuItem.name=name
         if(desc) menuItem.desc=desc
         if(price) menuItem.price=price
+        let uploadResult=null
         if(image){
-            const uploadResult=await uploadToCloudinary(image)
+            uploadResult=await uploadToCloudinary(image)
             menuItem.image=uploadResult?.secure_url
         }
         await menuItem.save()
