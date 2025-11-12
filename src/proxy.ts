@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
         (
             url.pathname.startsWith('/sign-in') ||
             url.pathname.startsWith('/sign-up') ||
-            url.pathname.startsWith('/verify') ||
+            url.pathname.startsWith('/verify-code') ||
             url.pathname==='/'
         )
     ){
@@ -32,5 +32,5 @@ export const config = {
     '/sign-up',
     '/',
     '/dashboard/:path*',
-    '/verify/:path*'],
+    '/verify-code/:path*'],
 }

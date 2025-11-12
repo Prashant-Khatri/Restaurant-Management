@@ -1,9 +1,8 @@
 import UserModel from "@/models/User.models"
 
-export async function POST(req : Request,{params} : {params : {userId : string}}){
+export async function POST(req : Request){
     try {
-        const {verificationCode}=await req.json()
-        const {userId}=await params
+        const {verificationCode,userId}=await req.json()
 
         const user=await UserModel.findById(userId)
         if(!user){

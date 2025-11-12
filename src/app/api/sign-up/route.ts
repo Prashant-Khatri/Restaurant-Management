@@ -4,7 +4,9 @@ import UserModel from "@/models/User.models";
 import bcrypt from "bcrypt"
 
 export async function POST(req : Request){
-    const {role,name,email,password,upiId}=await req.json();
+    const data=await req.json()
+    console.log(data)
+    const {role,name,email,password,upiId}=data;
     const otp : string = Math.floor(100000+Math.random()*900000).toString();
     try {
         await dbConnect();
