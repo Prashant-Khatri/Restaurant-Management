@@ -13,8 +13,8 @@ export async function proxy(request: NextRequest) {
         (
             url.pathname.startsWith('/sign-in') ||
             url.pathname.startsWith('/sign-up') ||
-            url.pathname.startsWith('/verify-code') ||
-            url.pathname==='/'
+            url.pathname.startsWith('/verify-code')
+            // url.pathname==='/'
         )
     ){
         return NextResponse.redirect(new URL('/dashboard', request.url))
