@@ -5,9 +5,22 @@ import MenuItemModel from "@/models/MenuItem.models"
 export async function PATCH(req : Request,{params} : {params : {menuItemId : string}}){
     try {
         const data=await req.formData()
-        const name= data.get('name') as string | null
-        const desc= data.get('desc') as string | null
-        const price = data.get('price') as number | null 
+        console.log(data)
+        let name=undefined
+        let tempName= data.get('name')
+        if(tempName!=="undefined" && tempName!==null && tempName!==""){
+            name=tempName.toString()
+        }
+        let desc=undefined
+        let tempDesc= data.get('desc')
+        if(tempDesc!=="undefined" && tempDesc!== null && tempDesc!==""){
+            desc=tempDesc.toString()
+        }
+        let price = undefined
+        let tempPrice=data.get('price')
+        if(tempPrice!==undefined && tempPrice!==null && tempPrice!==""){
+            price=Number(tempPrice)
+        }
         const image = data.get('image') as File | null
         
         if(!name && !desc && !price && !image){

@@ -1,8 +1,10 @@
+import dbConnect from "@/lib/dbConnect";
 import MenuModel from "@/models/Menu.models";
 
 export async function GET(req : Request){
     try {
-        const res=await MenuModel.findOne({})
+        dbConnect()
+        const res=await MenuModel.findOne({}).populate("items", "name image desc price")
         console.log(res)
         if(!res){
             return Response.json({

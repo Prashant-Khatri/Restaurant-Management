@@ -6,8 +6,9 @@ import MenuItemModel from "@/models/MenuItem.models"
 
 export async function GET(req : Request){
     try {
+        const session=await getServerSession(authOptions)
         await dbConnect()
-        const orderWithUserId=await OrderModel.findOne({custId : "690f2a8c888e734c7791a4a2"}).populate("orderItems.menuItem", "name price image")
+        const orderWithUserId=await OrderModel.findOne({custId : session?.user._id}).populate("orderItems.menuItem", "name image")
         if(!orderWithUserId){
             return Response.json({
                 success : false,
@@ -18,7 +19,9 @@ export async function GET(req : Request){
         return Response.json({
             success : true,
             message : "Order fetched successfully",
-            order : orderWithUserId.orderItems
+            order : orderWithUserId.orderItems,
+            totalPrice : orderWithUserId.totalPrice,
+            orderStatus : orderWithUserId.status
         },{status : 200})
     } catch (error) {
         console.log("Error in fetching order",error)

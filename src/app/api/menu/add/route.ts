@@ -7,9 +7,22 @@ import MenuItemModel from "@/models/MenuItem.models"
 export async function POST(req : Request){
     try {
         const data=await req.formData()
-        const name : string = data.get('name') as string
-        const desc : string = data.get('desc') as string
-        const price = data.get('price') as number | null 
+        console.log(data)
+        let name=undefined
+        let tempName= data.get('name')
+        if(tempName!=="undefined" && tempName!==null && tempName!==""){
+            name=tempName.toString()
+        }
+        let desc=undefined
+        let tempDesc= data.get('desc')
+        if(tempDesc!=="undefined" && tempDesc!== null && tempDesc!==""){
+            desc=tempDesc.toString()
+        }
+        let price = undefined
+        let tempPrice=data.get('price')
+        if(tempPrice!==undefined && tempPrice!==null && tempPrice!==""){
+            price=Number(tempPrice)
+        }
         const image = data.get('image') as File | null
 
         console.log(name)
