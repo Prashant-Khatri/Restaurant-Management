@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// key={menuItem._id} name={menuItem.name} desc={menuItem.desc} image={menuItem.image} price={menuItem.price} menuItemid={menuItem._id}
 function MenuItemCard({name,desc,image,price,menuItemid,getMenu} : any){
     const form=useForm({
         defaultValues : {

@@ -43,7 +43,7 @@ function Navbar(){
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                 <NavigationMenuLink asChild>
-                                    <Link href="/staffs">Staffs</Link>
+                                    <Link href="/staff">Staffs</Link>
                                 </NavigationMenuLink>
                                 </NavigationMenuItem>
                             </div>
@@ -52,7 +52,15 @@ function Navbar(){
                             session.user.role==='Staff' &&
                             <NavigationMenuItem>
                             <NavigationMenuLink asChild>
-                                <Link href="/orders">Pending Orders</Link>
+                                <Link href="/order/pending-order">Pending Orders</Link>
+                            </NavigationMenuLink>
+                            </NavigationMenuItem>
+                        }
+                        {
+                            session.user.role==='Staff' &&
+                            <NavigationMenuItem>
+                            <NavigationMenuLink asChild>
+                                <Link href="/order/served-order">Served Orders</Link>
                             </NavigationMenuLink>
                             </NavigationMenuItem>
                         }
