@@ -2,7 +2,7 @@
 import CheckoutPage from "@/components/CheckouPage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 if(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY===undefined){
     throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined")
 }
@@ -27,7 +27,7 @@ function PaymentPage() {
           currency: "usd",
         }}
       >
-        <CheckoutPage amount={amount}/>
+        <CheckoutPage amount={Number(amount)}/>
       </Elements>
     </main>
   );

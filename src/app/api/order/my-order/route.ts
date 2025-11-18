@@ -21,7 +21,8 @@ export async function GET(req : Request){
             message : "Order fetched successfully",
             order : orderWithUserId.orderItems,
             totalPrice : orderWithUserId.totalPrice,
-            orderStatus : orderWithUserId.status
+            orderStatus : orderWithUserId.status,
+            orderId : orderWithUserId._id
         },{status : 200})
     } catch (error) {
         console.log("Error in fetching order",error)

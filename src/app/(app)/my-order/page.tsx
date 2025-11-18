@@ -11,10 +11,12 @@ function MyOrderPage(){
     const [myOrder,setMyOrder]=useState<OrderItem[]>([])
     const [totalPrice,setTotalPrice]=useState(0)
     const [orderStatus,setOrderStatus]=useState("")
+    const [orderId,setOrderId]=useState("")
     const router=useRouter()
     const getMyOrder=async ()=>{
         try {
             const res=await axios.get('/api/order/my-order')
+            console.log(res)
             if(!res){
                 toast.error('Error in geting your order')
                 return;
@@ -26,6 +28,7 @@ function MyOrderPage(){
             setMyOrder(res.data.order)
             setTotalPrice(res.data.totalPrice)
             setOrderStatus(res.data.orderStatus)
+            setOrderId(res.data.orderId)
         } catch (error) {
             console.log("Error in geting my order",error)
             toast.error("Error in geting my order")
@@ -43,7 +46,7 @@ function MyOrderPage(){
                         <h1>Order Status : {orderStatus}</h1>
                         {
                             myOrder.map(orderItem=>(
-                                <Card>
+                                <Card key={orderItem._id}>
                                 <CardHeader>
                                     <CardTitle>{orderItem.menuItem.name}</CardTitle>
                                 </CardHeader>

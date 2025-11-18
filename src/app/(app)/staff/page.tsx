@@ -7,6 +7,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -15,6 +16,7 @@ import z from "zod"
 function StaffPage(){
     const [staffs,setStaffs]=useState([])
     const [open,setOpen]=useState(false)
+    const router=useRouter()
     const form=useForm({
         resolver : zodResolver(z.object({
             salary : z.coerce.number({message : "Must be a number"}).min(1000,{message : "Salary must be atleast 1000"})
@@ -122,7 +124,7 @@ function StaffPage(){
                                 <TableCell className="font-medium">
                                     {
                                         staff.salary===0 ? (<>Assign Salary First</>) : (
-                                            staff.salaryPaid ? (<>Salary Paid</>) : (<Button>Pay Salary</Button>)
+                                            staff.salaryPaid ? (<>Salary Paid</>) : (<Button onClick={()=>router.push(`/payment/?amount=${staff.salary}`)}>Pay Salary</Button>)
                                         )
                                     }
                                 </TableCell>

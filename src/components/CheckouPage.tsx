@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import axios from "axios";
 
-const CheckoutPage =({ amount }: { amount: number }) => {
+const CheckoutPage =({amount}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -46,13 +46,14 @@ const CheckoutPage =({ amount }: { amount: number }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `/payment-success?amount=${amount}`,
+        return_url: `${window.location.origin}/payment-success?amount=${amount}`,
       },
     });
 
     if (error) {
       setErrorMessage(error.message);
     }
+
     setLoading(false);
   }
 
