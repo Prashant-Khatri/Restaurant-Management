@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderItem } from "@/models/Order.models";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -10,6 +11,7 @@ function MyOrderPage(){
     const [myOrder,setMyOrder]=useState<OrderItem[]>([])
     const [totalPrice,setTotalPrice]=useState(0)
     const [orderStatus,setOrderStatus]=useState("")
+    const router=useRouter()
     const getMyOrder=async ()=>{
         try {
             const res=await axios.get('/api/order/my-order')
@@ -58,7 +60,7 @@ function MyOrderPage(){
                         <h2>Total Price of your order : {totalPrice}</h2>
                         {
                             orderStatus==="Served" &&
-                            <Button>Pay : {totalPrice} for your order</Button>
+                            <Button onClick={()=>router.push(`/payment?amount=${totalPrice}`)}>Pay : {totalPrice} for your order</Button>
                         }
                     </div>
                 ) : (<>Cheetah</>) 
