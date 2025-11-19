@@ -6,9 +6,10 @@ import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { OrderType } from "../pending-order/page";
 
 function PendingOrdersPage(){
-    const [orders,setOrders]=useState([])
+    const [orders,setOrders]=useState<OrderType[]>([])
     const getServedOrders=async ()=>{
         try {
             const res=await axios.get('/api/order/get-served-orders')

@@ -12,16 +12,39 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import z from "zod"
+import * as z from "zod"
+
+type StaffType={
+    _id : string;
+    name : string;
+    email : string;
+    salary : number;
+    lastPayment? : Date
+}
+
+const SalarySchema = z.object({
+    salary: z.string()
+    .min(1, "Salary cannot be empty.") 
+    .pipe(z.coerce.number()
+        .min(1000, "Salary must be at least 1000 INR.")
+        .positive("Salary must be a positive number.")
+    )
+});
+
+type SalaryFormValues = z.infer<typeof SalarySchema>;
+
+type SalaryFormInput={
+    salary : string;
+}
 
 function StaffPage(){
-    const [staffs,setStaffs]=useState([])
+    const [staffs,setStaffs]=useState<StaffType[]>([])
     const [open,setOpen]=useState(false)
     const router=useRouter()
-    const form=useForm({
-        resolver : zodResolver(z.object({
-            salary : z.coerce.number({message : "Must be a number"}).min(1000,{message : "Salary must be atleast 1000"})
-        }))
+    const form=useForm<SalaryFormInput>({
+        defaultValues : {
+            salary : ""
+        }
     })
     const getStaffs=async ()=>{
         try {
@@ -37,7 +60,7 @@ function StaffPage(){
             toast.error(axiosError.response?.data.message || "")
         }
     }
-    const onSubmit=async (data,staffId)=>{
+    const onSubmit=async (data : SalaryFormValues,staffId : string)=>{
         try {
             const res=await axios.patch(`/api/assign-salary/${staffId}`,{
                 salary : data.salary

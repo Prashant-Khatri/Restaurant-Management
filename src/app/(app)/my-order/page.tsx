@@ -1,15 +1,24 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { OrderItem } from "@/models/Order.models";
 import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+type OrderItemType={
+    menuItem : {
+        name : string;
+        image : string
+    };
+    quantity : number;
+    price : number
+    _id : string;
+}
+
 function MyOrderPage(){
-    const [myOrder,setMyOrder]=useState<OrderItem[]>([])
+    const [myOrder,setMyOrder]=useState<OrderItemType[]>([])
     const [totalPrice,setTotalPrice]=useState(0)
     const [orderStatus,setOrderStatus]=useState("")
     const [orderId,setOrderId]=useState("")

@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 function SignInPage(){
-    const form=useForm({
+    const form=useForm<z.infer<typeof signInSchema>>({
         resolver : zodResolver(signInSchema)
     })
     const router=useRouter()

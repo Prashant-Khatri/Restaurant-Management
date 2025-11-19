@@ -14,14 +14,32 @@ export async function proxy(request: NextRequest) {
             url.pathname.startsWith('/sign-in') ||
             url.pathname.startsWith('/sign-up') ||
             url.pathname.startsWith('/verify-code')
-            // url.pathname==='/'
         )
     ){
-        return NextResponse.redirect(new URL('/dashboard', request.url))
+        return NextResponse.redirect(new URL('/', request.url))
     }
-    if(!token && url.pathname.startsWith('/dashboard')){
+    if(!token && url.pathname==='/'){
         return NextResponse.redirect(new URL('/sign-in',request.url))
     }
+    // if(token?.role==="Customer" &&
+    //     !(
+    //         url.pathname.startsWith('/place-order') ||
+    //         url.pathname.startsWith('/my-order')
+    //     )
+    // ){
+    //     return NextResponse.redirect(new URL('/place-order',request.url))
+    // }
+    // if(token?.role==="Staff" && !url.pathname.startsWith('/order')){
+    //     return NextResponse.redirect(new URL('/place-order',request.url))
+    // }
+    // if(token?.role==="Admin" &&
+    //     !(
+    //         url.pathname.startsWith('/menu') ||
+    //         url.pathname.startsWith('/staff')
+    //     )
+    // ){
+    //     return NextResponse.redirect(new URL('/staff',request.url))
+    // }
     return NextResponse.next()
 }
  
@@ -31,6 +49,11 @@ export const config = {
     '/sign-in',
     '/sign-up',
     '/',
+    '/menu',
+    '/staff',
+    '/order/:path',
+    '/place-order',
+    '/my-order',
     '/dashboard/:path*',
     '/verify-code/:path*'],
 }

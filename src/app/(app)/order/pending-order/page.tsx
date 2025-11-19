@@ -7,8 +7,21 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+export type OrderType={
+    _id : string;
+    totalPrice : number;
+    table : number;
+    orderItems : [{
+        menuItem : {
+            name : string;
+        },
+        quantity : number;
+        _id : string;
+    }]
+}
+
 function PendingOrdersPage(){
-    const [orders,setOrders]=useState([])
+    const [orders,setOrders]=useState<OrderType[]>([])
     const getPendingOrders=async ()=>{
         try {
             const res=await axios.get('/api/order/get-pending-orders')
@@ -23,7 +36,7 @@ function PendingOrdersPage(){
             toast.error(axiosError.response?.data.message || "")
         }
     }
-    const clickHandler=async (orderId)=>{
+    const clickHandler=async (orderId : string)=>{
         console.log(orderId)
         try {
             const res=await axios.patch(`/api/order/update-status/${orderId}`,{

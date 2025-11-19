@@ -12,8 +12,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+type menuType={
+    _id : string;
+    name : string;
+    desc : string;
+    image : string;
+    price : number
+}
+
 function MenuPage(){
-    const [menu,setMenu]=useState([])
+    const [menu,setMenu]=useState<menuType[]>([])
     const router=useRouter()
     const [open, setOpen] = useState(false);
     const form=useForm({
