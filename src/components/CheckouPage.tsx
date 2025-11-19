@@ -8,7 +8,13 @@ import {
 } from "@stripe/react-stripe-js";
 import axios from "axios";
 
-const CheckoutPage =({amount}) => {
+type CheckOutPageProps={
+  amount : number;
+  orderId? : string;
+  staffId? : string
+}
+
+const CheckoutPage =({amount,orderId,staffId}:CheckOutPageProps) => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -42,11 +48,22 @@ const CheckoutPage =({amount}) => {
       return;
     }
 
+    let baseUrl : string;
+    let params : string=`?amount=${amount}`
+
+    if(orderId){
+      baseUrl='/payment-success/order'
+      params+=`&orderId=${orderId}`
+    }else{
+      baseUrl='/payment-success/staff'
+      params+=`&staffId=${staffId}`
+    }
+
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `${window.location.origin}/payment-success?amount=${amount}`,
+        return_url: `${window.location.origin}${baseUrl}${params}`,
       },
     });
 

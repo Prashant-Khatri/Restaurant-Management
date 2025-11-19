@@ -4,6 +4,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { calculateDays } from "@/helpers/calculateDays";
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
@@ -124,7 +125,9 @@ function StaffPage(){
                                 <TableCell className="font-medium">
                                     {
                                         staff.salary===0 ? (<>Assign Salary First</>) : (
-                                            staff.salaryPaid ? (<>Salary Paid</>) : (<Button onClick={()=>router.push(`/payment/?amount=${staff.salary}`)}>Pay Salary</Button>)
+                                            staff.lastPayment ? (
+                                                calculateDays(staff.lastPayment)<=30 ? (<>Salary Paid</>) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
+                                            ) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
                                         )
                                     }
                                 </TableCell>

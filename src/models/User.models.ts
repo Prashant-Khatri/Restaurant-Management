@@ -8,6 +8,7 @@ export interface User extends Document{
     otp : string;
     upiId? : string;
     salaryPaid? : boolean;
+    lastPayment? : Date
 }
 
 const userSchema : Schema<User> =new Schema({
@@ -43,6 +44,9 @@ const userSchema : Schema<User> =new Schema({
     salaryPaid : {
         type : Boolean,
         default : false
+    },
+    lastPayment : {
+        type : Date
     }
 })
 

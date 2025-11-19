@@ -8,6 +8,8 @@ if(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY===undefined){
 }
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 function PaymentPage() {
+    const params=useParams()
+    const {staffId}=params
     const searchParams = useSearchParams();
     const amount = searchParams.get("amount");
   return (
@@ -24,10 +26,10 @@ function PaymentPage() {
         options={{
           mode: "payment",
           amount: Number(amount)*100,
-          currency: "usd",
+          currency: "inr",
         }}
       >
-        <CheckoutPage amount={Number(amount)}/>
+        <CheckoutPage amount={Number(amount)} staffId={staffId}/>
       </Elements>
     </main>
   );

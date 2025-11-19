@@ -59,8 +59,9 @@ function MenuPage(){
             }
             setMenu(res.data.menuItems)
         } catch (error) {
-            console.log("Error in fetching menu",error)
-            toast.error("Error in fetching menu")
+            const axiosError=error as AxiosError<ApiResponse>
+            console.log(axiosError.response?.data.message)
+            toast.error(axiosError.response?.data.message || "")
         }
     }
     useEffect(()=>{
