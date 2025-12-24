@@ -21,7 +21,7 @@ export type OrderType={
 }
 
 function PendingOrdersPage(){
-    const [orders,setOrders]=useState<OrderType[]>([])
+    const [orders,setOrders]=useState<OrderType[] | null>(null)
     const getPendingOrders=async ()=>{
         try {
             const res=await axios.get('/api/order/get-pending-orders')
@@ -61,43 +61,46 @@ function PendingOrdersPage(){
     return (
         <div>
             {
-                orders.length>0 ? (
-                    <>
-                    {
-                        orders.map(order=>(
-                            <Card key={order._id}>
-                            <CardHeader>
-                                <CardTitle>Order for Table No : {order.table}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                    <TableHead className="w-[100px]">OrderItem</TableHead>
-                                    <TableHead>Quantity</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {
-                                        order.orderItems.map(orderItem=>(
-                                            <TableRow key={orderItem._id}>
-                                            <TableCell className="font-medium">{orderItem.menuItem.name}</TableCell>
-                                            <TableCell>{orderItem.quantity}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    }
-                                </TableBody>
-                                </Table>
-                            </CardContent>
-                            <CardFooter>
-                                <Button onClick={()=>clickHandler(order._id)}>Marked as served</Button>
-                                <h3>Total Amount : {order.totalPrice}</h3>
-                            </CardFooter>
-                            </Card>
-                        ))
-                    }
-                    </>
-                ) : (<div>No Pending Orders</div>)
+                orders ? 
+                (
+                    orders.length>0 ? (
+                        <>
+                        {
+                            orders.map(order=>(
+                                <Card key={order._id}>
+                                <CardHeader>
+                                    <CardTitle>Order for Table No : {order.table}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                        <TableHead className="w-[100px]">OrderItem</TableHead>
+                                        <TableHead>Quantity</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {
+                                            order.orderItems.map(orderItem=>(
+                                                <TableRow key={orderItem._id}>
+                                                <TableCell className="font-medium">{orderItem.menuItem.name}</TableCell>
+                                                <TableCell>{orderItem.quantity}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        }
+                                    </TableBody>
+                                    </Table>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button onClick={()=>clickHandler(order._id)}>Marked as served</Button>
+                                    <h3>Total Amount : {order.totalPrice}</h3>
+                                </CardFooter>
+                                </Card>
+                            ))
+                        }
+                        </>
+                    ) : (<div>No Pending Orders</div>)
+                ) : (<span>Spinner</span>)
             }
         </div>
     );

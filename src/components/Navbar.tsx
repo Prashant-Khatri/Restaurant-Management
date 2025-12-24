@@ -2,17 +2,27 @@
 import Link from "next/link";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "./ui/navigation-menu";
 import { signOut, useSession } from "next-auth/react";
-import { User } from "next-auth";
 import { Button } from "./ui/button";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react"
 
 function Navbar(){
-    const {data : session}=useSession()
-    const user :User=session?.user as User
+    const { setTheme } = useTheme()
+    const {data : session,status }=useSession()
+    if (status === "loading") {
+        <nav className="h-16 flex items-center">
+            Loading...
+            <Button variant="outline" size="icon">
+                <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            </Button>
+        </nav>
+    }
     return (
         <nav>
             <a href="#" className="text-2xl sm:text-xl font-bold text-center sm:text-left">
-                <Image src="" alt="Yokai Message" className="w-36"></Image>
+                <Image src="./globe.svg" alt="Yokai Message" width={36} height={36}></Image>
             </a>
             {
                 session ? (
@@ -90,6 +100,10 @@ function Navbar(){
                     </NavigationMenu>
                 )
             }
+            <Button variant="outline" size="icon">
+                <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            </Button>
         </nav>
     )
 }

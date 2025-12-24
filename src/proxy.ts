@@ -9,6 +9,9 @@ export async function proxy(request: NextRequest) {
     const token=await getToken({req : request})
     console.log(token)
     const url=request.nextUrl
+    if(!token){
+        return NextResponse.redirect(new URL('/sign-in',request.url))
+    }
     if(token && 
         (
             url.pathname.startsWith('/sign-in') ||
@@ -16,38 +19,41 @@ export async function proxy(request: NextRequest) {
             url.pathname.startsWith('/verify-code')
         )
     ){
-        return NextResponse.redirect(new URL('/', request.url))
+        if(token.role==='Customer'){
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+        else if(token.role==='Staff'){
+            return NextResponse.redirect(new URL('/order/pending-order', request.url))
+        }else{
+            return NextResponse.redirect(new URL('/staff',request.url))
+        }
     }
-    if(!token && url.pathname==='/'){
-        return NextResponse.redirect(new URL('/sign-in',request.url))
+    if(token.role==="Customer" &&
+        !(
+            url.pathname.startsWith('/place-order') ||
+            url.pathname.startsWith('/my-order')  ||
+            url.pathname==='/'
+        )
+    ){
+        return NextResponse.redirect(new URL('/',request.url))
     }
-    // if(token?.role==="Customer" &&
-    //     !(
-    //         url.pathname.startsWith('/place-order') ||
-    //         url.pathname.startsWith('/my-order')
-    //     )
-    // ){
-    //     return NextResponse.redirect(new URL('/place-order',request.url))
-    // }
-    // if(token?.role==="Staff" && !url.pathname.startsWith('/order')){
-    //     return NextResponse.redirect(new URL('/place-order',request.url))
-    // }
-    // if(token?.role==="Admin" &&
-    //     !(
-    //         url.pathname.startsWith('/menu') ||
-    //         url.pathname.startsWith('/staff')
-    //     )
-    // ){
-    //     return NextResponse.redirect(new URL('/staff',request.url))
-    // }
+    if(token.role==="Staff" && !url.pathname.startsWith('/order')){
+        return NextResponse.redirect(new URL('/order',request.url))
+    }
+    if(token.role==="Admin" &&
+        !(
+            url.pathname.startsWith('/menu') ||
+            url.pathname.startsWith('/staff')
+        )
+    ){
+        return NextResponse.redirect(new URL('/staff',request.url))
+    }
     return NextResponse.next()
 }
  
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    '/sign-in',
-    '/sign-up',
     '/',
     '/menu',
     '/staff',

@@ -21,7 +21,7 @@ type menuType={
 }
 
 function MenuPage(){
-    const [menu,setMenu]=useState<menuType[]>([])
+    const [menu,setMenu]=useState<menuType[] | null>(null)
     const router=useRouter()
     const [open, setOpen] = useState(false);
     const form=useForm({
@@ -79,7 +79,9 @@ function MenuPage(){
     return (
         <div>
             {
-                menu.length>0 ? (
+                menu ? 
+                (
+                    menu.length>0 ? (
                     <div>
                     <Dialog open={open} onOpenChange={setOpen}>
                             <DialogTrigger asChild onClick={()=>setOpen(true)}>
@@ -168,6 +170,7 @@ function MenuPage(){
                         }
                     </div>
                 ) : (<div>No Item in menu currently</div>)
+                ) : ((<span>Spinner</span>))
             }
         </div>
     )

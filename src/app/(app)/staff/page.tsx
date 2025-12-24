@@ -38,7 +38,7 @@ type SalaryFormInput={
 }
 
 function StaffPage(){
-    const [staffs,setStaffs]=useState<StaffType[]>([])
+    const [staffs,setStaffs]=useState<StaffType[] | null>(null)
     const [open,setOpen]=useState(false)
     const router=useRouter()
     const form=useForm<SalaryFormInput>({
@@ -84,81 +84,84 @@ function StaffPage(){
     return (
         <div>
             {
-                staffs.length>0 ? (
-                    staffs.map(staff=>(
-                        <Table key={staff._id}>
-                        <TableCaption>A list of current working staffs.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                            <TableHead className="w-[100px]">Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Salary</TableHead>
-                            <TableHead>Salary Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">{staff.name}</TableCell>
-                                <TableCell className="font-medium">{staff.email}</TableCell>
-                                <TableCell className="font-medium">
-                                    {
-                                        staff.salary===0 ? (
-                                            <Dialog open={open} onOpenChange={setOpen}>
-                                                <DialogTrigger asChild>
-                                                <Button variant="outline">Assign Salary</Button>
-                                                </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[425px]">
-                                                <DialogHeader>
-                                                    <DialogTitle>Assign Salary to {staff.name}</DialogTitle>
-                                                    <DialogDescription>
-                                                    Click assign to assigning salary
-                                                    </DialogDescription>
-                                                </DialogHeader>
-                                                <Form {...form}>
-                                                <form onSubmit={form.handleSubmit((data)=>onSubmit(data,staff._id))} className="space-y-8">
-                                                    <FormField
-                                                    control={form.control}
-                                                    name="salary"
-                                                    render={({ field }) => (
-                                                        <FormItem>
-                                                        <FormLabel>Salary</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="Enter salary here" {...field} type="number"/>
-                                                        </FormControl>
-                                                        <FormDescription>
-                                                            Assign salary to {staff.name}
-                                                        </FormDescription>
-                                                        <FormMessage />
-                                                        </FormItem>
-                                                    )}
-                                                    />
-                                                    <Button type="submit">Assign</Button>
-                                                </form>
-                                                </Form>
-                                                <DialogFooter>
-                                                    <DialogClose asChild>
-                                                    <Button variant="outline">Cancel</Button>
-                                                    </DialogClose>
-                                                </DialogFooter>
-                                                </DialogContent>
-                                            </Dialog>
-                                        ) : (`${staff.salary}`)
-                                    }
-                                </TableCell>
-                                <TableCell className="font-medium">
-                                    {
-                                        staff.salary===0 ? (<>Assign Salary First</>) : (
-                                            staff.lastPayment ? (
-                                                calculateDays(staff.lastPayment)<=30 ? (<>Salary Paid</>) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
-                                            ) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
-                                        )
-                                    }
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                        </Table>
-                    ))
-                ) : (<div>No Staffs found</div>)
+                staffs ? 
+                (
+                    staffs.length>0 ? (
+                        staffs.map(staff=>(
+                            <Table key={staff._id}>
+                            <TableCaption>A list of current working staffs.</TableCaption>
+                            <TableHeader>
+                                <TableRow>
+                                <TableHead className="w-[100px]">Name</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead>Salary</TableHead>
+                                <TableHead>Salary Status</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell className="font-medium">{staff.name}</TableCell>
+                                    <TableCell className="font-medium">{staff.email}</TableCell>
+                                    <TableCell className="font-medium">
+                                        {
+                                            staff.salary===0 ? (
+                                                <Dialog open={open} onOpenChange={setOpen}>
+                                                    <DialogTrigger asChild>
+                                                    <Button variant="outline">Assign Salary</Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="sm:max-w-[425px]">
+                                                    <DialogHeader>
+                                                        <DialogTitle>Assign Salary to {staff.name}</DialogTitle>
+                                                        <DialogDescription>
+                                                        Click assign to assigning salary
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                    <Form {...form}>
+                                                    <form onSubmit={form.handleSubmit((data)=>onSubmit(data,staff._id))} className="space-y-8">
+                                                        <FormField
+                                                        control={form.control}
+                                                        name="salary"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                            <FormLabel>Salary</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="Enter salary here" {...field} type="number"/>
+                                                            </FormControl>
+                                                            <FormDescription>
+                                                                Assign salary to {staff.name}
+                                                            </FormDescription>
+                                                            <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                        />
+                                                        <Button type="submit">Assign</Button>
+                                                    </form>
+                                                    </Form>
+                                                    <DialogFooter>
+                                                        <DialogClose asChild>
+                                                        <Button variant="outline">Cancel</Button>
+                                                        </DialogClose>
+                                                    </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
+                                            ) : (`${staff.salary}`)
+                                        }
+                                    </TableCell>
+                                    <TableCell className="font-medium">
+                                        {
+                                            staff.salary===0 ? (<>Assign Salary First</>) : (
+                                                staff.lastPayment ? (
+                                                    calculateDays(staff.lastPayment)<=30 ? (<>Salary Paid</>) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
+                                                ) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
+                                            )
+                                        }
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                            </Table>
+                        ))
+                    ) : (<div>No Staffs found</div>)
+                ) : (<span>Spinner</span>)
             }
         </div>
     );
