@@ -38,7 +38,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL('/',request.url))
     }
     if(token.role==="Staff" && !url.pathname.startsWith('/order')){
-        return NextResponse.redirect(new URL('/order',request.url))
+        return NextResponse.redirect(new URL('/order/pending-order',request.url))
     }
     if(token.role==="Admin" &&
         !(

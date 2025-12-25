@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { OrderType } from "../pending-order/page";
 
 function PendingOrdersPage(){
-    const [orders,setOrders]=useState<OrderType[] | null>([])
+    const [orders,setOrders]=useState<OrderType[] | null>(null)
     const getServedOrders=async ()=>{
         try {
             const res=await axios.get('/api/order/get-served-orders')

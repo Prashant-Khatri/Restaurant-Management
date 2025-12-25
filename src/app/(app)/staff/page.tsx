@@ -82,88 +82,153 @@ function StaffPage(){
         getStaffs()
     },[])
     return (
-        <div>
-            {
-                staffs ? 
-                (
-                    staffs.length>0 ? (
-                        staffs.map(staff=>(
-                            <Table key={staff._id}>
-                            <TableCaption>A list of current working staffs.</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                <TableHead className="w-[100px]">Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Salary</TableHead>
-                                <TableHead>Salary Status</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell className="font-medium">{staff.name}</TableCell>
-                                    <TableCell className="font-medium">{staff.email}</TableCell>
-                                    <TableCell className="font-medium">
-                                        {
-                                            staff.salary===0 ? (
-                                                <Dialog open={open} onOpenChange={setOpen}>
-                                                    <DialogTrigger asChild>
-                                                    <Button variant="outline">Assign Salary</Button>
-                                                    </DialogTrigger>
-                                                    <DialogContent className="sm:max-w-[425px]">
-                                                    <DialogHeader>
-                                                        <DialogTitle>Assign Salary to {staff.name}</DialogTitle>
-                                                        <DialogDescription>
-                                                        Click assign to assigning salary
-                                                        </DialogDescription>
-                                                    </DialogHeader>
-                                                    <Form {...form}>
-                                                    <form onSubmit={form.handleSubmit((data)=>onSubmit(data,staff._id))} className="space-y-8">
-                                                        <FormField
-                                                        control={form.control}
-                                                        name="salary"
-                                                        render={({ field }) => (
-                                                            <FormItem>
-                                                            <FormLabel>Salary</FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="Enter salary here" {...field} type="number"/>
-                                                            </FormControl>
-                                                            <FormDescription>
-                                                                Assign salary to {staff.name}
-                                                            </FormDescription>
-                                                            <FormMessage />
-                                                            </FormItem>
-                                                        )}
-                                                        />
-                                                        <Button type="submit">Assign</Button>
-                                                    </form>
-                                                    </Form>
-                                                    <DialogFooter>
-                                                        <DialogClose asChild>
-                                                        <Button variant="outline">Cancel</Button>
-                                                        </DialogClose>
-                                                    </DialogFooter>
-                                                    </DialogContent>
-                                                </Dialog>
-                                            ) : (`${staff.salary}`)
-                                        }
-                                    </TableCell>
-                                    <TableCell className="font-medium">
-                                        {
-                                            staff.salary===0 ? (<>Assign Salary First</>) : (
-                                                staff.lastPayment ? (
-                                                    calculateDays(staff.lastPayment)<=30 ? (<>Salary Paid</>) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
-                                                ) : (<Button onClick={()=>router.push(`/payment/staff/${staff._id}/?amount=${staff.salary}`)}>Pay Salary</Button>)
-                                            )
-                                        }
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                            </Table>
-                        ))
-                    ) : (<div>No Staffs found</div>)
-                ) : (<span>Spinner</span>)
-            }
-        </div>
+        <div className="w-full max-w-7xl mx-auto px-4 py-6">
+            {staffs ? (
+                staffs.length > 0 ? (
+                <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+
+                    {/* Table wrapper for mobile */}
+                    <div className="overflow-x-auto">
+                    <Table>
+                        <TableCaption className="text-slate-500">
+                        A list of current working staffs.
+                        </TableCaption>
+
+                        <TableHeader>
+                        <TableRow className="bg-slate-100 dark:bg-slate-800">
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Salary</TableHead>
+                            <TableHead>Status</TableHead>
+                        </TableRow>
+                        </TableHeader>
+
+                        <TableBody>
+                        {staffs.map((staff) => (
+                            <TableRow
+                            key={staff._id}
+                            className="hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                            >
+                            {/* Name */}
+                            <TableCell className="font-medium">
+                                {staff.name}
+                            </TableCell>
+
+                            {/* Email */}
+                            <TableCell className="text-slate-500">
+                                {staff.email}
+                            </TableCell>
+
+                            {/* Salary */}
+                            <TableCell>
+                                {staff.salary === 0 ? (
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="border-emerald-500 text-emerald-600"
+                                    >
+                                        Assign Salary
+                                    </Button>
+                                    </DialogTrigger>
+
+                                    <DialogContent className="sm:max-w-[425px] rounded-xl">
+                                    <DialogHeader>
+                                        <DialogTitle>
+                                        Assign Salary
+                                        </DialogTitle>
+                                        <DialogDescription>
+                                        Assign salary to <b>{staff.name}</b>
+                                        </DialogDescription>
+                                    </DialogHeader>
+
+                                    <Form {...form}>
+                                        <form
+                                        onSubmit={form.handleSubmit((data) =>
+                                            onSubmit(data, staff._id)
+                                        )}
+                                        className="space-y-4"
+                                        >
+                                        <FormField
+                                            control={form.control}
+                                            name="salary"
+                                            render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Salary</FormLabel>
+                                                <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Enter salary"
+                                                    {...field}
+                                                />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                            )}
+                                        />
+
+                                        <div className="flex justify-end gap-3">
+                                            <DialogClose asChild>
+                                            <Button variant="outline">Cancel</Button>
+                                            </DialogClose>
+                                            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                                            Assign
+                                            </Button>
+                                        </div>
+                                        </form>
+                                    </Form>
+                                    </DialogContent>
+                                </Dialog>
+                                ) : (
+                                <span className="font-semibold text-slate-800 dark:text-slate-100">
+                                    ₹ {staff.salary}
+                                </span>
+                                )}
+                            </TableCell>
+
+                            {/* Status */}
+                            <TableCell>
+                                {staff.salary === 0 ? (
+                                <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                                    Salary Not Assigned
+                                </span>
+                                ) : staff.lastPayment &&
+                                calculateDays(staff.lastPayment) <= 30 ? (
+                                <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                    Salary Paid
+                                </span>
+                                ) : (
+                                <Button
+                                    size="sm"
+                                    onClick={() =>
+                                    router.push(
+                                        `/payment/staff/${staff._id}/?amount=${staff.salary}`
+                                    )
+                                    }
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                                >
+                                    Pay Salary
+                                </Button>
+                                )}
+                            </TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    </div>
+                </div>
+                ) : (
+                <div className="flex items-center justify-center h-[50vh] text-slate-500">
+                    No staffs found 👥
+                </div>
+                )
+            ) : (
+                <div className="flex items-center justify-center h-[50vh]">
+                <span className="animate-pulse text-slate-500">Loading...</span>
+                </div>
+            )}
+            </div>
     );
 }
 

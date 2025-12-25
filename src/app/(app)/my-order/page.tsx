@@ -18,12 +18,12 @@ type OrderItemType={
 }
 
 function MyOrderPage(){
-    const [myOrder,setMyOrder]=useState<OrderItemType[]>([])
+    const [myOrder,setMyOrder]=useState<OrderItemType[] | null>(null)
     const [totalPrice,setTotalPrice]=useState(0)
     const [orderStatus,setOrderStatus]=useState("")
     const [orderId,setOrderId]=useState("")
     const router=useRouter()
-    const getMyOrder=async ()=>{
+    const getMyOrder=async()=>{
         try {
             const res=await axios.get('/api/order/my-order')
             console.log(res)
@@ -32,10 +32,6 @@ function MyOrderPage(){
                 return;
             }
             setMyOrder(res.data.order)
-            if(res.data.order.length==0){
-                toast.error("No order placed yet")
-                return;
-            }
             setTotalPrice(res.data.totalPrice)
             setOrderStatus(res.data.orderStatus)
             setOrderId(res.data.orderId)
@@ -62,42 +58,43 @@ function MyOrderPage(){
     }
     useEffect(()=>{
         getMyOrder()
-        console.log("hello")
-        console.log(myOrder)
     },[])
     return (
         <div>
             {
-                myOrder.length>0 ? (
-                    <div>
-                        <h1>Order Status : {orderStatus}</h1>
-                        {
-                            myOrder.map(orderItem=>(
-                                <Card key={orderItem._id}>
-                                <CardHeader>
-                                    <CardTitle>{orderItem.menuItem.name}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <img src={orderItem.menuItem.image}></img>
-                                </CardContent>
-                                <CardFooter>
-                                    <p>Quantity : {orderItem.quantity}</p>
-                                    <p>Price : {orderItem.price}</p>
-                                </CardFooter>
-                                </Card>
-                            ))
-                        }
-                        <h2>Total Price of your order : {totalPrice}</h2>
-                        {
-                            orderStatus==="Served" &&
-                            <Button onClick={()=>router.push(`/payment/order/${orderId}?amount=${totalPrice}`)}>Pay : {totalPrice} for your order</Button>
-                        }
-                        {
-                            orderStatus==='Preparing' &&
-                            <Button onClick={deleteHandler}>Delete Order</Button>
-                        }
-                    </div>
-                ) : (<>Cheetah</>)
+                myOrder ? 
+                (
+                    myOrder.length>0 ? (
+                        <div>
+                            <h1>Order Status : {orderStatus}</h1>
+                            {
+                                myOrder.map(orderItem=>(
+                                    <Card key={orderItem._id}>
+                                    <CardHeader>
+                                        <CardTitle>{orderItem.menuItem.name}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <img src={orderItem.menuItem.image}></img>
+                                    </CardContent>
+                                    <CardFooter>
+                                        <p>Quantity : {orderItem.quantity}</p>
+                                        <p>Price : {orderItem.price}</p>
+                                    </CardFooter>
+                                    </Card>
+                                ))
+                            }
+                            <h2>Total Price of your order : {totalPrice}</h2>
+                            {
+                                orderStatus==="Served" &&
+                                <Button onClick={()=>router.push(`/payment/order/${orderId}?amount=${totalPrice}`)}>Pay : {totalPrice} for your order</Button>
+                            }
+                            {
+                                orderStatus==='Preparing' &&
+                                <Button onClick={deleteHandler}>Delete Order</Button>
+                            }
+                        </div>
+                    ) : (<>Cheetah</>)
+                ) : (<span>Spinner</span>)
             }
         </div>
     )

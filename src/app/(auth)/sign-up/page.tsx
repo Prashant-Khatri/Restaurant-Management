@@ -46,89 +46,175 @@ function SignUpPage(){
         }
     }
     return (
-        <div>
+        <div
+        className="
+            min-h-screen
+            flex items-center justify-center
+            bg-linear-to-br from-slate-50 to-slate-100
+            dark:from-slate-900 dark:to-slate-950
+            px-4
+        "
+        >
+        <div
+            className="
+            w-full max-w-md
+            rounded-2xl
+            bg-white dark:bg-slate-900
+            border border-slate-200 dark:border-slate-700
+            shadow-lg
+            p-6 sm:p-8
+            "
+        >
+            {/* Header */}
+            <div className="mb-6 text-center">
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+                Create an Account 🍽️
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+                Join us and enjoy a seamless experience
+            </p>
+            </div>
+
             <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+            >
+                {/* Role */}
                 <Controller
-                    name="role"
-                    control={form.control}
-                    rules={{ required: "Please select a theme" }}
-                    render={({ field, fieldState }) => (
+                name="role"
+                control={form.control}
+                rules={{ required: "Please select a role" }}
+                render={({ field, fieldState }) => (
                     <div>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select your role" />
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                    >
+                        <SelectTrigger className="w-full focus:ring-emerald-500">
+                        <SelectValue placeholder="Select your role" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="Admin">Admin</SelectItem>
-                            <SelectItem value="Staff">Staff</SelectItem>
-                            <SelectItem value="Customer">Customer</SelectItem>
+                        <SelectItem value="Staff">Staff</SelectItem>
+                        <SelectItem value="Customer">Customer</SelectItem>
                         </SelectContent>
-                        </Select>
-                        {fieldState.error && (
-                            <p className="text-red-500 text-sm mt-1">{fieldState.error.message}</p>
-                        )}
-                    </div>
+                    </Select>
+
+                    {fieldState.error && (
+                        <p className="text-red-500 text-sm mt-1">
+                        {fieldState.error.message}
+                        </p>
                     )}
+                    </div>
+                )}
                 />
+
+                {/* Name */}
                 <FormField
                 control={form.control}
                 name="name"
-                render={({ field ,fieldState}) => (
+                render={({ field }) => (
                     <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                        <Input placeholder="Enter your name here" {...field} />
+                        <Input
+                        placeholder="Your full name"
+                        className="focus-visible:ring-emerald-500"
+                        {...field}
+                        />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
                 />
+
+                {/* Email */}
                 <FormField
                 control={form.control}
                 name="email"
-                render={({ field ,fieldState}) => (
+                render={({ field }) => (
                     <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                        <Input placeholder="Enter your email here" {...field} />
+                        <Input
+                        type="email"
+                        placeholder="you@example.com"
+                        className="focus-visible:ring-emerald-500"
+                        {...field}
+                        />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
                 />
+
+                {/* Password */}
                 <FormField
                 control={form.control}
                 name="password"
-                render={({ field ,fieldState}) => (
+                render={({ field }) => (
                     <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                        <Input placeholder="Enter your password here" {...field} type="password"/>
+                        <Input
+                        type="password"
+                        placeholder="••••••••"
+                        className="focus-visible:ring-emerald-500"
+                        {...field}
+                        />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
                 />
-                {
-                    roleValue==="Staff" &&
-                    <FormField
-                        control={form.control}
-                        name="upiId"
-                        render={({ field ,fieldState}) => (
-                            <FormItem>
-                            <FormLabel>Upi Id</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter your UpiId here" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                }
-                <Button type="submit">Submit</Button>
+
+                {/* UPI (Only for Staff) */}
+                {roleValue === "Staff" && (
+                <FormField
+                    control={form.control}
+                    name="upiId"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>UPI ID</FormLabel>
+                        <FormControl>
+                        <Input
+                            placeholder="example@upi"
+                            className="focus-visible:ring-emerald-500"
+                            {...field}
+                        />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                )}
+
+                {/* Submit */}
+                <Button
+                type="submit"
+                className="
+                    w-full
+                    bg-emerald-600 hover:bg-emerald-700
+                    text-white
+                    font-semibold
+                    rounded-lg
+                    py-2.5
+                "
+                >
+                Create Account
+                </Button>
             </form>
             </Form>
+
+            {/* Footer */}
+            <p className="mt-6 text-center text-sm text-slate-500">
+            Already have an account?{" "}
+            <span className="text-emerald-600 hover:underline cursor-pointer" onClick={()=>router.push('/sign-in')}>
+                Sign in
+            </span>
+            </p>
+        </div>
         </div>
     );
 }

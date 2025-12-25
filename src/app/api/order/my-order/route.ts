@@ -14,7 +14,7 @@ export async function GET(req : Request){
                 success : false,
                 message : "No order made yet",
                 order : []
-            },{status : 401})
+            },{status : 200})
         }
         return Response.json({
             success : true,

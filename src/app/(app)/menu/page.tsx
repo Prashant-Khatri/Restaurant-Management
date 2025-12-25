@@ -77,102 +77,168 @@ function MenuPage(){
         console.log(menu)
     },[])
     return (
-        <div>
-            {
-                menu ? 
-                (
-                    menu.length>0 ? (
-                    <div>
+        <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 px-4 py-6">
+            {menu ? (
+                menu.length > 0 ? (
+                <div className="max-w-7xl mx-auto space-y-6">
+                    
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">
+                        Menu Items
+                    </h1>
+
+                    {/* Add Item Button */}
                     <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild onClick={()=>setOpen(true)}>
-                            <Button variant="outline">Add New Item in Menu</Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle>Add MenuItem</DialogTitle>
-                                <DialogDescription>
-                                Add MenuItem here. Click Save when you are
-                                done.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <DialogTrigger asChild>
+                        <Button
+                            onClick={() => setOpen(true)}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
+                        >
+                            + Add New Item
+                        </Button>
+                        </DialogTrigger>
+
+                        <DialogContent className="sm:max-w-[425px] rounded-xl">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-semibold">
+                            Add Menu Item
+                            </DialogTitle>
+                            <DialogDescription className="text-slate-500">
+                            Fill the details below and save the item.
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <Form {...form}>
+                            <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="space-y-4"
+                            >
                             <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter item name here" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                            />
-                            <FormField
-                            control={form.control}
-                            name="desc"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Description</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter item description here" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                            />
-                            <FormField
-                            control={form.control}
-                            name="image"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Image</FormLabel>
-                                <FormControl>
-                                    <Input 
-                                    type="file" 
-                                    accept="image/*"
-                                    onChange={(e) => field.onChange(e.target.files?.[0])}
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                    <Input
+                                        placeholder="Enter item name"
+                                        className="focus-visible:ring-emerald-500"
+                                        {...field}
                                     />
-                                </FormControl>
-                                <FormMessage />
+                                    </FormControl>
+                                    <FormMessage />
                                 </FormItem>
-                            )}
+                                )}
                             />
+
                             <FormField
-                            control={form.control}
-                            name="price"
-                            render={({ field }) => (
+                                control={form.control}
+                                name="desc"
+                                render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>Price</FormLabel>
-                                <FormControl>
-                                    <Input type="number" placeholder="Enter item price here" {...field} />
-                                </FormControl>
-                                <FormMessage />
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                    <Input
+                                        placeholder="Enter description"
+                                        className="focus-visible:ring-emerald-500"
+                                        {...field}
+                                    />
+                                    </FormControl>
+                                    <FormMessage />
                                 </FormItem>
-                            )}
+                                )}
                             />
-                                        <Button type="submit">Save</Button>
-                                </form>
-                        </Form>
-                            <DialogFooter>
+
+                            <FormField
+                                control={form.control}
+                                name="image"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Image</FormLabel>
+                                    <FormControl>
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        className="cursor-pointer"
+                                        onChange={(e) =>
+                                        field.onChange(e.target.files?.[0])
+                                        }
+                                    />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Price</FormLabel>
+                                    <FormControl>
+                                    <Input
+                                        type="number"
+                                        placeholder="₹ Price"
+                                        className="focus-visible:ring-emerald-500"
+                                        {...field}
+                                    />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+
+                            <div className="flex justify-end gap-3 pt-2">
                                 <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
                                 </DialogClose>
-                            </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                        {
-                            menu.map(menuItem=>(
-                                <MenuItemCard key={menuItem._id} name={menuItem.name} desc={menuItem.desc} image={menuItem.image} price={menuItem.price} menuItemid={menuItem._id} getMenu={getMenu}/>
-                            ))
-                        }
+                                <Button
+                                type="submit"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                >
+                                Save
+                                </Button>
+                            </div>
+                            </form>
+                        </Form>
+                        </DialogContent>
+                    </Dialog>
                     </div>
-                ) : (<div>No Item in menu currently</div>)
-                ) : ((<span>Spinner</span>))
-            }
-        </div>
+
+                    {/* Menu Grid */}
+                    <div className="
+                    grid gap-6
+                    grid-cols-1
+                    sm:grid-cols-2
+                    md:grid-cols-3
+                    lg:grid-cols-4
+                    ">
+                    {menu.map((menuItem) => (
+                        <MenuItemCard
+                        key={menuItem._id}
+                        name={menuItem.name}
+                        desc={menuItem.desc}
+                        image={menuItem.image}
+                        price={menuItem.price}
+                        menuItemid={menuItem._id}
+                        getMenu={getMenu}
+                        />
+                    ))}
+                    </div>
+                </div>
+                ) : (
+                <div className="flex flex-col items-center justify-center h-[60vh] text-slate-500">
+                    <p className="text-lg">No items in menu currently 🍽️</p>
+                </div>
+                )
+            ) : (
+                <div className="flex items-center justify-center h-[60vh]">
+                <span className="animate-pulse text-slate-500">Loading...</span>
+                </div>
+            )}
+            </div>
     )
 }
 
